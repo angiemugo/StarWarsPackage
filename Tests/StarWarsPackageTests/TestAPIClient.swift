@@ -81,4 +81,18 @@ class TestAPIClient: XCTestCase {
             }
         }.disposed(by: disposeBag)
     }
+
+    func testGetError() {
+        //TODO: Test that the system returns the correct error code
+    }
+
+    func testCreateResponse() {
+        let endpoint = APIEndpoint.films
+        let method = APIMethod.get
+        let urlRequest = URLRequest(endpoint, method)
+        XCTAssertEqual(urlRequest.httpMethod, "GET")
+        XCTAssertNil(urlRequest.httpBody)
+        XCTAssertNil(urlRequest.httpBody)
+        XCTAssertEqual(urlRequest.url?.absoluteString, "https://swapi.dev/" + APIEndpoint.films.rawValue)
+    }
 }

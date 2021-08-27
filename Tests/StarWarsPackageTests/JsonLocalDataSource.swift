@@ -11,10 +11,10 @@ import StarWarsPackage
 
 public class JsonLocalDataSource {
     public init() {}
-    
+
     public func read<T: Decodable>(_ fileName: String) -> Single<T> {
         return Single.create(subscribe: { (observer) -> Disposable in
-            if let path = Bundle(for: type(of: self)).path(forResource: fileName, ofType: "json") {
+            if let path = Bundle.styleBundle.path(forResource: fileName, ofType: "json") {
                 do {
                     let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
                     let decoder = JSONDecoder()
@@ -31,4 +31,9 @@ public class JsonLocalDataSource {
             return Disposables.create()
         })
     }
+}
+
+public extension Bundle {
+    @objc
+    static var styleBundle: Bundle { .module }
 }

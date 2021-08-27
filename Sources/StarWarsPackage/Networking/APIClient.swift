@@ -38,9 +38,9 @@ final class APIClient: APIClientProtocol {
                 guard let self = self else { return }
                 let statusCode = response.response.statusCode
                 if 200..<300 ~= statusCode {
-                    self.decodeResponse(response.response, response.data, responseHandler)
+                    self.decodeResponse(response.response, response.data, responseHandler, errorHandler)
                 } else {
-                    print("This is the error: \(statusCode)")
+                    errorHandler(.genericError)
                 }
             }, onFailure: { _ in
                 errorHandler(.timeOut)
@@ -49,12 +49,13 @@ final class APIClient: APIClientProtocol {
     
     private func decodeResponse<T: Decodable>(_ response: HTTPURLResponse,
                                               _ data: Data,
-                                              _ responseHandler: @escaping (T) -> Void) {
+                                              _ responseHandler: @escaping (T) -> Void,
+                                              _ errorHandler: ((_ error: StarWarsError) -> Void)) {
         do {
             let decoder = JSONDecoder()
             responseHandler(try decoder.decode(T.self, from: data))
         } catch {
-            print("This is the error: \(error), \(T.self)")
+            errorHandler(.decodeError)
         }
     }
 }

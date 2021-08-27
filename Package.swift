@@ -27,9 +27,9 @@ let package = Package(
             name: "StarWarsPackageTests",
             dependencies: ["StarWarsPackage"],
             resources: [
-                .copy("MockUpData/Films.json"),
+                .copy("Films.json"),
                 .copy("Person.json"),
-                .copy("StarWarsPackageTests/MockUpData/Planets.json")
+                .copy("Planets.json")
             ])
     ]
 )

@@ -10,4 +10,6 @@ import Foundation
 public enum StarWarsError: Error {
     case timeOut
     case fileNotFound
+    case decodeError
+    case genericError
 }

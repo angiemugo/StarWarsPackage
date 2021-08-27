@@ -10,10 +10,16 @@ import RxSwift
 import RxCocoa
 import StarWarsPackage
 
+enum MockScenarios {
+    case timeOut
+    case decodeError
+    case genericError
+}
+
 class MockAPIClient: APIClientProtocol {
     public let localDataSource = JsonLocalDataSource()
     var fetchSuccess = false
-    var error: StarWarsError = .timeOut
+    var errorMockScenario = MockScenarios.timeOut
     var endPoint = APIEndpoint.person
     let disposeBag = DisposeBag()
 
@@ -38,9 +44,22 @@ class MockAPIClient: APIClientProtocol {
                 }).disposed(by: self.disposeBag)
                 return Disposables.create()
             } else {
-                single(.failure(self.error))
-                return Disposables.create()
+                var error = StarWarsError.timeOut
+                switch self.errorMockScenario {
+                case .decodeError:
+                    error = StarWarsError.decodeError
+                case .genericError:
+                    error = StarWarsError.genericError
+                case .timeOut:
+                    error = StarWarsError.timeOut
+                }
+                single(.failure(error))
             }
+            return Disposables.create()
         }
     }
+
+func mockWith(_ scenario: MockScenarios) {
+    self.errorMockScenario = scenario
+}
 }
